@@ -15,14 +15,14 @@ export function MessageList({ messages, selectedId, onSelect, isLoading }: Messa
     return (
       <div className="h-full flex flex-col">
         <div className="p-4 border-b border-border bg-muted/20 font-mono text-xs uppercase tracking-wider text-muted-foreground flex justify-between">
-          <span>Inbox (0)</span>
-          <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-primary animate-pulse" /> Polling</span>
+          <span>الوارد (0)</span>
+          <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-primary animate-pulse" /> مراقبة</span>
         </div>
         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-muted-foreground gap-4">
           <div className="w-12 h-12 rounded-full border border-dashed border-muted-foreground/30 flex items-center justify-center animate-[spin_10s_linear_infinite]">
             <Clock className="w-5 h-5 text-muted-foreground/50" />
           </div>
-          <p className="font-mono text-sm uppercase">Waiting for messages...</p>
+          <p className="font-mono text-sm uppercase">في انتظار الرسائل...</p>
         </div>
       </div>
     );
@@ -32,14 +32,14 @@ export function MessageList({ messages, selectedId, onSelect, isLoading }: Messa
     return (
       <div className="h-full flex flex-col">
         <div className="p-4 border-b border-border bg-muted/20 font-mono text-xs uppercase tracking-wider text-muted-foreground flex justify-between">
-          <span>Inbox (0)</span>
-          <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-primary animate-pulse" /> Polling</span>
+          <span>الوارد (0)</span>
+          <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-primary animate-pulse" /> مراقبة</span>
         </div>
         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-muted-foreground gap-4">
           <div className="w-12 h-12 rounded-full bg-muted/50 flex items-center justify-center">
             <Mail className="w-5 h-5 text-muted-foreground/50" />
           </div>
-          <p className="font-mono text-sm uppercase">Inbox Empty</p>
+          <p className="font-mono text-sm uppercase">البريد الوارد فارغ</p>
         </div>
       </div>
     );
@@ -48,8 +48,8 @@ export function MessageList({ messages, selectedId, onSelect, isLoading }: Messa
   return (
     <div className="h-full flex flex-col bg-card border-r border-border">
       <div className="p-4 border-b border-border bg-muted/20 font-mono text-xs uppercase tracking-wider text-muted-foreground flex justify-between sticky top-0 z-10">
-        <span>Inbox ({messages.length})</span>
-        <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-primary animate-pulse" /> Polling</span>
+        <span>الوارد ({messages.length})</span>
+        <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-primary animate-pulse" /> مراقبة</span>
       </div>
       
       <ScrollArea className="flex-1">
