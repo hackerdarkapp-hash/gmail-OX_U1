@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "OTP Email Bot"
+version = "1.0.0"
+id = "artifacts/otp-bot"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22478
+
+[services.development]
+run = "pnpm --filter @workspace/otp-bot run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/otp-bot", "run", "build" ]
+publicDir = "artifacts/otp-bot/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"

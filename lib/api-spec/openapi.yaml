@@ -1,0 +1,301 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: OTP Email Bot API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: emails
+    description: Temporary email operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /domains:
+    get:
+      operationId: listDomains
+      tags: [emails]
+      summary: Get available email domains
+      description: Returns list of available domains for generating temporary emails
+      responses:
+        "200":
+          description: List of available domains
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EmailDomain"
+        "500":
+          description: Failed to fetch domains
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /emails:
+    post:
+      operationId: generateEmail
+      tags: [emails]
+      summary: Generate a temporary email address
+      description: Creates a new temporary email account and returns its credentials
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateEmailRequest"
+      responses:
+        "201":
+          description: Email account created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmailAccount"
+        "500":
+          description: Failed to create email
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /emails/{id}/messages:
+    get:
+      operationId: listMessages
+      tags: [emails]
+      summary: Get all messages for an email account
+      description: Returns all received messages for the given email account
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: x-email-token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EmailMessage"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Failed to fetch messages
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /emails/{id}/messages/{messageId}:
+    get:
+      operationId: fetchMessage
+      tags: [emails]
+      summary: Get a specific message with full body
+      description: Returns the full message content including extracted OTP
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: messageId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: x-email-token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Full message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EmailMessageFull"
+        "404":
+          description: Message not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Failed to fetch message
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /emails/{id}/otp:
+    get:
+      operationId: extractOtp
+      tags: [emails]
+      summary: Get extracted OTP from latest message
+      description: Scans latest messages and extracts any OTP/verification codes
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: x-email-token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OTP extraction result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OtpResult"
+        "500":
+          description: Failed to fetch OTP
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    EmailDomain:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+
+    GenerateEmailRequest:
+      type: object
+      properties:
+        domain:
+          type: string
+          description: Optional domain to use for the email address
+
+    EmailAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        address:
+          type: string
+        token:
+          type: string
+        createdAt:
+          type: string
+        expiresAt:
+          type: string
+      required:
+        - id
+        - address
+        - token
+        - createdAt
+        - expiresAt
+
+    EmailMessage:
+      type: object
+      properties:
+        id:
+          type: string
+        from:
+          type: string
+        subject:
+          type: string
+        intro:
+          type: string
+        receivedAt:
+          type: string
+        hasOtp:
+          type: boolean
+      required:
+        - id
+        - from
+        - subject
+        - intro
+        - receivedAt
+        - hasOtp
+
+    EmailMessageFull:
+      type: object
+      properties:
+        id:
+          type: string
+        from:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        receivedAt:
+          type: string
+        otp:
+          type: ["string", "null"]
+      required:
+        - id
+        - from
+        - subject
+        - body
+        - receivedAt
+        - otp
+
+    OtpResult:
+      type: object
+      properties:
+        otp:
+          type: ["string", "null"]
+        source:
+          type: ["string", "null"]
+        foundIn:
+          type: ["string", "null"]
+      required:
+        - otp
+        - source
+        - foundIn
