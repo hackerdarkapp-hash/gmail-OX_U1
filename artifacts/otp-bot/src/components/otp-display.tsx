@@ -1,6 +1,7 @@
 import { Copy, ScanSearch, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect, useRef } from "react";
 import type { OtpResult } from "@workspace/api-client-react";
 
 interface OtpDisplayProps {
@@ -10,11 +11,23 @@ interface OtpDisplayProps {
 
 export function OtpDisplay({ otpResult, isLoading }: OtpDisplayProps) {
   const { toast } = useToast();
+  const prevOtpRef = useRef<string | null | undefined>(null);
+
+  useEffect(() => {
+    if (otpResult?.otp && otpResult.otp !== prevOtpRef.current) {
+      prevOtpRef.current = otpResult.otp;
+      navigator.clipboard.writeText(otpResult.otp).catch(() => {});
+      toast({
+        title: "✅ تم نسخ الرمز تلقائياً",
+        description: `الرمز: ${otpResult.otp} — جاهز للاستخدام`,
+      });
+    }
+  }, [otpResult?.otp]);
 
   const handleCopy = () => {
     if (!otpResult?.otp) return;
     navigator.clipboard.writeText(otpResult.otp);
-    toast({ title: "OTP Copied", description: "Code copied to clipboard." });
+    toast({ title: "تم النسخ", description: "تم نسخ الرمز إلى الحافظة." });
   };
 
   if (!otpResult?.otp && !isLoading) {
@@ -24,8 +37,8 @@ export function OtpDisplay({ otpResult, isLoading }: OtpDisplayProps) {
           <ScanSearch className="w-5 h-5 text-muted-foreground" />
         </div>
         <div>
-          <h3 className="font-mono text-xs uppercase text-muted-foreground mb-1">OTP Scanner</h3>
-          <p className="text-muted-foreground text-xs">Monitoring for verification codes...</p>
+          <h3 className="font-mono text-xs uppercase text-muted-foreground mb-1">ماسح OTP</h3>
+          <p className="text-muted-foreground text-xs">في انتظار رموز التحقق...</p>
         </div>
       </div>
     );
@@ -40,7 +53,7 @@ export function OtpDisplay({ otpResult, isLoading }: OtpDisplayProps) {
       <div className="flex flex-col items-center gap-2 z-10 w-full">
         <div className="flex items-center gap-2 text-primary uppercase text-xs tracking-widest font-mono font-semibold">
           <CheckCircle2 className="w-4 h-4" />
-          <span>Code Extracted</span>
+          <span>تم استخراج الرمز</span>
         </div>
 
         <div
@@ -59,7 +72,7 @@ export function OtpDisplay({ otpResult, isLoading }: OtpDisplayProps) {
 
         {otpResult?.source && (
           <div className="text-xs font-mono text-muted-foreground uppercase">
-            From: <span className="text-primary/70 break-all">{otpResult.source}</span>
+            من: <span className="text-primary/70 break-all">{otpResult.source}</span>
           </div>
         )}
       </div>
@@ -71,7 +84,7 @@ export function OtpDisplay({ otpResult, isLoading }: OtpDisplayProps) {
         className="font-mono uppercase text-xs border-primary/30 text-primary hover:bg-primary/10 hover:text-primary z-10"
       >
         <Copy className="w-4 h-4 mr-2" />
-        Copy Code
+        نسخ الرمز
       </Button>
     </div>
   );
