@@ -41,7 +41,7 @@ export function EmailDisplay({ account, onGenerate, isGenerating, generateError 
   const handleCopy = () => {
     if (!account) return;
     navigator.clipboard.writeText(account.address);
-    toast({ title: "Copied", description: "Email address copied to clipboard." });
+    toast({ title: "تم النسخ", description: "تم نسخ البريد الإلكتروني." });
   };
 
   const handleGenerate = () => {
@@ -100,7 +100,7 @@ export function EmailDisplay({ account, onGenerate, isGenerating, generateError 
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-2 text-muted-foreground uppercase text-xs tracking-wider font-mono">
           <TerminalSquare className="w-4 h-4 text-primary shrink-0" />
-          <span>Active Session</span>
+          <span>الجلسة النشطة</span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -123,7 +123,7 @@ export function EmailDisplay({ account, onGenerate, isGenerating, generateError 
                     : ""
                 }`}
               >
-                {selectedDomain ? `@${selectedDomain}` : "Auto Domain"}
+                {selectedDomain ? `@${selectedDomain}` : "نطاق تلقائي"}
               </span>
               <ChevronDown
                 className={`w-3 h-3 transition-transform ${showDomains ? "rotate-180" : ""}`}
@@ -247,7 +247,7 @@ export function EmailDisplay({ account, onGenerate, isGenerating, generateError 
             <RotateCcw
               className={`w-3 h-3 mr-1.5 ${isGenerating ? "animate-spin" : ""}`}
             />
-            {isGenerating ? "Generating..." : "Generate New"}
+            {isGenerating ? "جاري الإنشاء..." : "توليد جديد"}
           </Button>
         </div>
       </div>
@@ -305,8 +305,8 @@ export function EmailDisplay({ account, onGenerate, isGenerating, generateError 
       {/* Status row */}
       {account && (
         <div className="text-xs font-mono text-muted-foreground flex justify-between">
-          <span>STATUS: ONLINE</span>
-          <span>EXPIRES: {new Date(account.expiresAt).toLocaleTimeString()}</span>
+          <span>الحالة: متصل</span>
+          <span>ينتهي: {new Date(account.expiresAt).toLocaleTimeString()}</span>
         </div>
       )}
 
