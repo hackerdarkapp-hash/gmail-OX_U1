@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import { Dashboard } from "@/pages/dashboard";
+import { Footer } from "@/components/footer";
 
 const queryClient = new QueryClient();
 
@@ -21,8 +22,11 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
+          <div className="pb-16">
+            <Router />
+          </div>
         </WouterRouter>
+        <Footer />
         <Toaster />
       </TooltipProvider>
     </QueryClientProvider>
