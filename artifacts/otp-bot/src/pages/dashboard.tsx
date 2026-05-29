@@ -77,7 +77,7 @@ export function Dashboard() {
         </div>
         <div className="text-xs font-mono text-muted-foreground uppercase tracking-widest flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-primary animate-pulse block" />
-          System Online
+          النظام يعمل
         </div>
       </header>
 
@@ -116,7 +116,7 @@ export function Dashboard() {
             }`}
           >
             <Inbox className="w-3.5 h-3.5" />
-            Inbox {messages.length > 0 ? `(${messages.length})` : ""}
+            البريد الوارد {messages.length > 0 ? `(${messages.length})` : ""}
           </button>
           <button
             onClick={() => setMobileTab("message")}
@@ -127,7 +127,7 @@ export function Dashboard() {
             }`}
           >
             <Mail className="w-3.5 h-3.5" />
-            Message
+            الرسالة
           </button>
         </div>
 
@@ -145,7 +145,7 @@ export function Dashboard() {
               {!account && (
                 <div className="absolute inset-0 flex items-center justify-center bg-card/70 backdrop-blur-sm z-10">
                   <div className="font-mono text-xs uppercase text-muted-foreground border border-border bg-background px-5 py-3 rounded-md text-center">
-                    Generate an email to begin
+                    أنشئ بريداً إلكترونياً للبدء
                   </div>
                 </div>
               )}
@@ -172,7 +172,7 @@ export function Dashboard() {
             {!account && (
               <div className="absolute inset-0 flex items-center justify-center bg-card/70 backdrop-blur-sm z-10">
                 <div className="font-mono text-sm uppercase text-muted-foreground border border-border bg-background px-6 py-4 rounded-md">
-                  Generate an email to begin monitoring
+                  أنشئ بريداً إلكترونياً لبدء المراقبة
                 </div>
               </div>
             )}
