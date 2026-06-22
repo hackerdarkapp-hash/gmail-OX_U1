@@ -19,7 +19,7 @@ export function Dashboard() {
 
   const handleGenerate = (domain?: string) => {
     generateEmail.mutate(
-      domain ? { domain } : undefined,
+      { data: domain ? { domain } : undefined },
       {
         onSuccess: (data) => {
           setAccount(data);
